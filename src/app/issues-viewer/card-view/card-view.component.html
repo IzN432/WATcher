@@ -30,22 +30,42 @@
 
 <ng-template #assigneeHeader let-assignee>
   <div class="column-header">
-    <mat-card>
-      <mat-card-header [ngStyle]="{ height: '40px' }">
-        <div
-          mat-card-avatar
-          *ngIf="assignee"
-          [ngStyle]="{
-            background: 'url(' + assignee.avatar_url + ')',
-            'background-size': '40px'
-          }"
-        ></div>
-        <mat-card-title>
-          {{ assignee.login }}
-        </mat-card-title>
-        <div class="row-count">{{ this.issues.count }}</div>
-      </mat-card-header>
-    </mat-card>
+    <a class="no-underline" *ngIf="assignee.html_url; else noLink" target="_blank" [href]="assignee.html_url">
+      <mat-card>
+        <mat-card-header [ngStyle]="{ height: '40px' }">
+          <div
+            mat-card-avatar
+            *ngIf="assignee"
+            [ngStyle]="{
+              background: 'url(' + assignee.avatar_url + ')',
+              'background-size': '40px'
+            }"
+          ></div>
+          <mat-card-title>
+            {{ assignee.login }}
+          </mat-card-title>
+          <div class="row-count">{{ this.issues.count }}</div>
+        </mat-card-header>
+      </mat-card>
+    </a>
+    <ng-template #noLink>
+      <mat-card>
+        <mat-card-header [ngStyle]="{ height: '40px' }">
+          <div
+            mat-card-avatar
+            *ngIf="assignee"
+            [ngStyle]="{
+              background: 'url(' + assignee.avatar_url + ')',
+              'background-size': '40px'
+            }"
+          ></div>
+          <mat-card-title>
+            {{ assignee.login }}
+          </mat-card-title>
+          <div class="row-count">{{ this.issues.count }}</div>
+        </mat-card-header>
+      </mat-card>
+    </ng-template>
   </div>
 </ng-template>
 
