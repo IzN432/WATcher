@@ -49,6 +49,19 @@ export class FiltersService {
   readonly presetViews: {
     [key: string]: () => Partial<Filter>;
   } = {
+    openIssues: () => ({
+      title: '',
+      status: ['open issue'],
+      type: 'all',
+      sort: { active: 'date', direction: 'desc' },
+      labels: [],
+      milestones: [...this.milestoneService.milestones, Milestone.IssueWithoutMilestone, Milestone.PRWithoutMilestone].map(
+        (milestone) => milestone.title
+      ),
+      deselectedLabels: new Set<string>(),
+      itemsPerPage: 20,
+      assignees: [GithubUser.NO_ASSIGNEE.login]
+    }),
     currentlyActive: () => ({
       title: '',
       status: ['open pullrequest', 'merged pullrequest', 'open issue', 'closed issue'],

@@ -50,6 +50,7 @@ export class HeaderComponent implements OnInit {
   } = {
     currentlyActive: 'Currently active',
     contributions: 'Contributions',
+    openIssues: 'Open Issues',
     custom: 'Custom'
   };
 
