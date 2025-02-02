@@ -1,10 +1,9 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { MatSelectionList } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { BehaviorSubject, of } from 'rxjs';
 import { SimpleLabel } from '../../../../../src/app/core/models/label.model';
-import { FiltersService } from '../../../../../src/app/core/services/filters.service';
+import { Filter, FiltersService } from '../../../../../src/app/core/services/filters.service';
 import { LabelService } from '../../../../../src/app/core/services/label.service';
 import { LoggingService } from '../../../../../src/app/core/services/logging.service';
 import { LabelFilterBarComponent } from '../../../../../src/app/shared/filter-bar/label-filter-bar/label-filter-bar.component';
@@ -21,7 +20,20 @@ describe('LabelFilterBarComponent', () => {
   beforeEach(async () => {
     labelServiceSpy = jasmine.createSpyObj('LabelService', ['connect', 'startPollLabels', 'fetchLabels']);
     loggingServiceSpy = jasmine.createSpyObj('LoggingService', ['info', 'debug']);
-    filtersServiceSpy = jasmine.createSpyObj('FiltersService', ['updateFilters', 'sanitizeLabels']);
+    filtersServiceSpy = jasmine.createSpyObj('FiltersService', ['updateFilters', 'sanitizeLabels'], {
+      filter$: new BehaviorSubject<Filter>({
+        title: '',
+        status: ['open pullrequest', 'merged pullrequest', 'open issue', 'closed issue'],
+        type: 'all',
+        sort: { active: 'status', direction: 'asc' },
+        labels: [],
+        milestones: [],
+        hiddenLabels: new Set<string>(),
+        deselectedLabels: new Set<string>(),
+        itemsPerPage: 20,
+        assignees: []
+      })
+    });
 
     TestBed.configureTestingModule({
       providers: [
@@ -52,12 +64,12 @@ describe('LabelFilterBarComponent', () => {
       filtersServiceSpy.sanitizeLabels.and.callThrough();
     });
 
-    // it('should update allLabels with latest emmitted value after ngAfterViewInit', fakeAsync(() => {
-    //   component.ngAfterViewInit();
-    //   tick();
-    //   labelsSubject.next(SEVERITY_SIMPLE_LABELS);
-    //   expect(component.allLabels).toEqual(SEVERITY_SIMPLE_LABELS);
-    // }));
+    it('should update allLabels with latest emmitted value after ngAfterViewInit', fakeAsync(() => {
+      component.ngAfterViewInit();
+      tick();
+      labelsSubject.next(SEVERITY_SIMPLE_LABELS);
+      expect(component.allLabels).toEqual(SEVERITY_SIMPLE_LABELS);
+    }));
   });
 
   describe('hide(label)', () => {
