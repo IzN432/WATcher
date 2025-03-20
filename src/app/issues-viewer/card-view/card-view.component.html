@@ -12,6 +12,7 @@
           [issue]="issue"
           [filter]="issues.filter"
           [milestoneService]="milestoneService"
+          [cdkDragDisabled]="issue.issueOrPr === 'PullRequest'"
           cdkDrag
           [cdkDragData]="issue"
         ></app-issue-pr-card>
